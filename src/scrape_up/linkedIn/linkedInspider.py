@@ -23,10 +23,10 @@ class LinkedInPeopleProfileSpider(scrapy.Spider):
         yield item
 
     def extract_profile_info(self, response):
-        item = {}
-        item['profile'] = response.meta['profile']
-        item['url'] = response.meta['linkedin_url']
-
+        item = {
+            'profile': response.meta['profile'],
+            'url': response.meta['linkedin_url'],
+        }
         summary_box = response.css("section.top-card-layout")
         item['name'] = summary_box.css("h1::text").get().strip()
         item['description'] = summary_box.css("h2::text").get().strip()
@@ -58,8 +58,11 @@ class LinkedInPeopleProfileSpider(scrapy.Spider):
         experience_list = []
 
         for block in experience_blocks:
-            experience = {}
-            experience['organisation_profile'] = block.css('h4 a::attr(href)').get(default='').split('?')[0]
+            experience = {
+                'organisation_profile': block.css('h4 a::attr(href)')
+                .get(default='')
+                .split('?')[0]
+            }
             experience['location'] = block.css('p.experience-item__location::text').get(default='').strip()
 
             try:
@@ -78,12 +81,12 @@ class LinkedInPeopleProfileSpider(scrapy.Spider):
                     experience['start_time'] = date_ranges[0]
                     experience['end_time'] = date_ranges[1]
                     experience['duration'] = block.css('span.date-range__duration::text').get()
-               
+
                 elif len(date_ranges) == 1:
                     experience['start_time'] = date_ranges[0]
                     experience['end_time'] = 'present'
                     experience['duration'] = block.css('span.date-range__duration::text').get()
-                
+
             except Exception as e:
                 print('experience --> time ranges', e)
                 experience['start_time'] = ''
@@ -98,8 +101,7 @@ def extract_education_section(self, response):
     education_list = []
 
     for block in education_blocks:
-        education = {}
-        education['organisation'] = block.css('h3::text').get(default='').strip()
+        education = {'organisation': block.css('h3::text').get(default='').strip()}
         education['organisation_profile'] = block.css('a::attr(href)').get(default='').split('?')[0]
 
         try:

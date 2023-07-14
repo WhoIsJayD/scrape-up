@@ -28,8 +28,7 @@ class DevCommunity:
             data = BeautifulSoup(data.text, "html.parser")
             return data
         except:
-            message = "An Error Occurred!"
-            return message
+            return "An Error Occurred!"
     
     def all_articles(self):
         """
@@ -93,7 +92,7 @@ class DevCommunity:
                 reactions = x.find_all('span', class_="aggregate_reactions_counter")        
                 comments = x.find_all('a',class_="crayons-btn crayons-btn--s crayons-btn--ghost crayons-btn--icon-left flex items-center")        
                 readTime = x.find_all(class_="crayons-story__save")
-    
+
             for ti,a,d,ta,r,c,re, in zip(title, author, date, tags, reactions, comments, readTime):
                 articles_list["articles"].append({
                 "Title": ti.text.strip(),
@@ -107,8 +106,7 @@ class DevCommunity:
             json_data = json.dumps(articles_list, indent=2)
             return {"data": json_data, "message": "Successfully fetched all articles."}
         except:
-            message = "An Error Occurred!"
-            return message
+            return "An Error Occurred!"
 
 
     def __strTag__(self, tag: str):
@@ -134,8 +132,7 @@ class DevCommunity:
             data = BeautifulSoup(data.text, "html.parser")
             return data
         except:
-            message = "An Error Occurred!"
-            return message
+            return "An Error Occurred!"
     
     
     def tag_articles(self, tag: str):
@@ -197,7 +194,7 @@ class DevCommunity:
                 reactions = x.find_all('span', class_="aggregate_reactions_counter")        
                 comments = x.find_all('a',class_="crayons-btn crayons-btn--s crayons-btn--ghost crayons-btn--icon-left flex items-center")        
                 readTime = x.find_all(class_="crayons-story__save")
-    
+
             for ti,a,d,ta,r,c,re, in zip(title, author, date, tags_, reactions, comments, readTime):
                 articles_list["articles"].append({
                 "Title": ti.text.strip(),
@@ -211,8 +208,7 @@ class DevCommunity:
             json_data = json.dumps(articles_list, indent=2)
             return {"data": json_data, "message": "Successfully fetched all articles with the given tag."}
         except:
-            message = "An Error Occurred!"
-            return message
+            return "An Error Occurred!"
 
 
     def __strUser__(self):
@@ -237,8 +233,7 @@ class DevCommunity:
             data = BeautifulSoup(data.text, "html.parser")
             return data
         except:
-            message = "An Error Occurred!"
-            return message
+            return "An Error Occurred!"
 
     def user_details(self):
         """

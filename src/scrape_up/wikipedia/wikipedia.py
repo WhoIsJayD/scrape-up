@@ -17,8 +17,7 @@ class WikipediaScraper:
         sections = soup.find_all('h2')
         data = {}
         for section in sections:
-            heading = section.find('span', class_='mw-headline')
-            if heading:
+            if heading := section.find('span', class_='mw-headline'):
                 content = []
                 next_node = section.find_next_sibling(['h2', 'h3', 'h4', 'h5', 'h6'])
                 while next_node and next_node.name != 'h2':

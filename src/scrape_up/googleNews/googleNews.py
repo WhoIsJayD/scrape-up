@@ -36,7 +36,7 @@ class GoogleNews:
             "link": Link to the article
         }
         """
-        url = "https://www.google.com/search?q=" + self.topic + "&tbm=nws"
+        url = f"https://www.google.com/search?q={self.topic}&tbm=nws"
         try:
             res = requests.get(url)
             soup = BeautifulSoup(res.text, "html.parser")
@@ -92,15 +92,14 @@ class GoogleNews:
             soup = BeautifulSoup(page.content, features="xml")
             titles = soup.find_all("title")
 
+            if len(titles) <= 0:
+                return None
             top_stories_data = {"top_stories": []}
 
-            if len(titles) > 0:
-                for title in titles:
-                    top_stories_data["top_stories"].append(
-                        {"title": title.text.upper(), "date": time.ctime()}
-                    )
-                top_stories_data
-            else:
-                return None
+            for title in titles:
+                top_stories_data["top_stories"].append(
+                    {"title": title.text.upper(), "date": time.ctime()}
+                )
+            top_stories_data
         except requests.exceptions.RequestException as e:
             return None

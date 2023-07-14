@@ -22,8 +22,7 @@ class IMDB:
             source = requests.get("https://www.imdb.com/chart/top/?ref_=nv_mv_250")
             source.raise_for_status()
             soup = BeautifulSoup(source.text, "html.parser")
-            movies = soup.find("tbody", class_="lister-list").find_all("tr")
-            return movies
+            return soup.find("tbody", class_="lister-list").find_all("tr")
         except:
             return None
 
@@ -46,37 +45,30 @@ class IMDB:
         """
         try:
             movies = self.__scrape_page()
-            if movies is not None:
-                movie_data = []
-                for movie in movies:
-                    movie_name = movie.find("td", class_="titleColumn").a.text
-                    rank = (
-                        movie.find("td", class_="titleColumn")
-                        .get_text(strip=True)
-                        .split(".")[0]
-                    )
-                    year = movie.find("td", class_="titleColumn").span.text.strip("()")
-                    rating = movie.find(
-                        "td", class_="ratingColumn imdbRating"
-                    ).strong.text
+            if movies is None:
+                return {"data": None, "message": "Unable to fetch top rate movie"}
 
-                    movie_data.append([rank, movie_name, year, rating])
+            movie_data = []
+            for movie in movies:
+                movie_name = movie.find("td", class_="titleColumn").a.text
+                rank = (
+                    movie.find("td", class_="titleColumn")
+                    .get_text(strip=True)
+                    .split(".")[0]
+                )
+                year = movie.find("td", class_="titleColumn").span.text.strip("()")
+                rating = movie.find(
+                    "td", class_="ratingColumn imdbRating"
+                ).strong.text
 
-                return {
-                    "data": movie_data,
-                    "message": f"Top rated movie listed on IMDB has been fetched",
-                }
-            else:
-                return {
-                    "data": None,
-                    "message": f"Unable to fetch top rate movie",
-                }
+                movie_data.append([rank, movie_name, year, rating])
 
-        except requests.exceptions.RequestException as e:
             return {
-                "data": None,
-                "message": f"Unable to fetch top rate movie",
+                "data": movie_data,
+                "message": "Top rated movie listed on IMDB has been fetched",
             }
+        except requests.exceptions.RequestException as e:
+            return {"data": None, "message": "Unable to fetch top rate movie"}
 
     def scrape_genre_movies(self, genre):
         """

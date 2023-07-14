@@ -41,7 +41,7 @@ class AskUbuntu:
             "description": description of the question
         }
         """
-        url = "https://askubuntu.com/questions/tagged/" + self.topic + "?tab=Newest"
+        url = f"https://askubuntu.com/questions/tagged/{self.topic}?tab=Newest"
         try:
             res = requests.get(url)
             soup = BeautifulSoup(res.text, "html.parser")
@@ -71,13 +71,11 @@ class AskUbuntu:
                         "description": desc,
                     }
                 )
-            json_data = json.dumps(questions_data)
-            return json_data
+            return json.dumps(questions_data)
         except:
             error_message = {"message": "No questions related to the topic found"}
 
-            ejson = json.dumps(error_message)
-            return ejson
+            return json.dumps(error_message)
 
     def getActiveQuestions(self):
         """
@@ -96,7 +94,7 @@ class AskUbuntu:
             "description": description of the question
         }
         """
-        url = "https://askubuntu.com/questions/tagged/" + self.topic + "?tab=Active"
+        url = f"https://askubuntu.com/questions/tagged/{self.topic}?tab=Active"
         try:
             res = requests.get(url)
             soup = BeautifulSoup(res.text, "html.parser")
@@ -126,13 +124,11 @@ class AskUbuntu:
                         "description": desc,
                     }
                 )
-            json_data = json.dumps(questions_data)
-            return json_data
+            return json.dumps(questions_data)
         except:
             error_message = {"message": "No questions related to the topic found"}
 
-            ejson = json.dumps(error_message)
-            return ejson
+            return json.dumps(error_message)
 
     def getUnansweredQuestions(self):
         """
@@ -151,7 +147,7 @@ class AskUbuntu:
             "description": description of the question
         }
         """
-        url = "https://askubuntu.com/questions/tagged/" + self.topic + "?tab=Unanswered"
+        url = f"https://askubuntu.com/questions/tagged/{self.topic}?tab=Unanswered"
         try:
             res = requests.get(url)
             soup = BeautifulSoup(res.text, "html.parser")
@@ -181,13 +177,11 @@ class AskUbuntu:
                         "description": desc,
                     }
                 )
-            json_data = json.dumps(questions_data)
-            return json_data
+            return json.dumps(questions_data)
         except:
             error_message = {"message": "No questions related to the topic found"}
 
-            ejson = json.dumps(error_message)
-            return ejson
+            return json.dumps(error_message)
 
     def getBountiedQuestions(self):
         """
@@ -206,7 +200,7 @@ class AskUbuntu:
             "description": description of the question
         }
         """
-        url = "https://askubuntu.com/questions/tagged/" + self.topic + "?tab=Bountied"
+        url = f"https://askubuntu.com/questions/tagged/{self.topic}?tab=Bountied"
         try:
             res = requests.get(url)
             soup = BeautifulSoup(res.text, "html.parser")
@@ -236,13 +230,11 @@ class AskUbuntu:
                         "description": desc,
                     }
                 )
-            json_data = json.dumps(questions_data)
-            return json_data
+            return json.dumps(questions_data)
         except:
             error_message = {"message": "No questions related to the topic found"}
 
-            ejson = json.dumps(error_message)
-            return ejson
+            return json.dumps(error_message)
 
     def getFrequentQuestions(self):
         """
@@ -261,7 +253,7 @@ class AskUbuntu:
             "description": description of the question
         }
         """
-        url = "https://askubuntu.com/questions/tagged/" + self.topic + "?tab=Frequent"
+        url = f"https://askubuntu.com/questions/tagged/{self.topic}?tab=Frequent"
         try:
             res = requests.get(url)
             soup = BeautifulSoup(res.text, "html.parser")
@@ -291,13 +283,11 @@ class AskUbuntu:
                         "description": desc,
                     }
                 )
-            json_data = json.dumps(questions_data)
-            return json_data
+            return json.dumps(questions_data)
         except:
             error_message = {"message": "No questions related to the topic found"}
 
-            ejson = json.dumps(error_message)
-            return ejson
+            return json.dumps(error_message)
 
     def getHighScoredQuestions(self):
         """
@@ -316,7 +306,7 @@ class AskUbuntu:
             "description": description of the question
         }
         """
-        url = "https://askubuntu.com/questions/tagged/" + self.topic + "?tab=Votes"
+        url = f"https://askubuntu.com/questions/tagged/{self.topic}?tab=Votes"
         try:
             res = requests.get(url)
             soup = BeautifulSoup(res.text, "html.parser")
@@ -346,13 +336,11 @@ class AskUbuntu:
                         "description": desc,
                     }
                 )
-            json_data = json.dumps(questions_data)
-            return json_data
+            return json.dumps(questions_data)
         except:
             error_message = {"message": "No questions related to the topic found"}
 
-            ejson = json.dumps(error_message)
-            return ejson
+            return json.dumps(error_message)
 
 ask = AskUbuntu(topic="Python")
 print(ask.getActiveQuestions())

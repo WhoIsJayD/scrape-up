@@ -45,8 +45,7 @@ class PullRequest:
             "a", class_="IssueLabel hx_IssueLabel width-fit mb-1 mr-1"
         )
         try:
-            for d in label_raw:
-                labels_found.append(d.get_text().strip())
+            labels_found.extend(d.get_text().strip() for d in label_raw)
             labels_found + 1
             # return labels_found
             return labels_found
@@ -64,8 +63,7 @@ class PullRequest:
         """
         data = self.__scrape_page()
         try:
-            commits_count = data.find("span", id="commits_tab_counter").text.strip()
-            return commits_count
+            return data.find("span", id="commits_tab_counter").text.strip()
         except:
             return None
 
@@ -81,8 +79,7 @@ class PullRequest:
         data = self.__scrape_page()
         try:
             title_body = data.find("bdi", class_="js-issue-title markdown-title")
-            title = title_body.text.strip()
-            return title
+            return title_body.text.strip()
         except:
             return None
 
@@ -107,8 +104,7 @@ class PullRequest:
         data = self.__files_changed_body()
         try:
             files_changed_body = data.find("span", id="files_tab_counter")
-            files_changed = files_changed_body.text.strip()
-            return files_changed
+            return files_changed_body.text.strip()
         except:
             return None
 
@@ -129,10 +125,8 @@ class PullRequest:
             )
             if len(reviewers) == 0:
                 message = f"No reviewers found for {self.pr_number}"
-                return reviewerList
             else:
-                for reviewer in reviewers:
-                    reviewerList.append(reviewer.text)
-                return reviewerList
+                reviewerList.extend(reviewer.text for reviewer in reviewers)
+            return reviewerList
         except:
             return None

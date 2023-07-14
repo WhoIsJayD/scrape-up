@@ -11,8 +11,7 @@ class Repository:
         url = f"https://gitlab.com/{self.username}/{self.repository_name}"
         response = requests.get(url)
         response.raise_for_status()  # Raise an exception for any HTTP errors
-        soup = BeautifulSoup(response.text, "html.parser")
-        return soup
+        return BeautifulSoup(response.text, "html.parser")
 
     def get_name(self):
         try:

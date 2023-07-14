@@ -56,8 +56,7 @@ class LeetCode:
         url = f"https://leetcode.com/{self.username}"
         data = requests.get(url)
         data.raise_for_status()
-        soup = BeautifulSoup(data.text, "html.parser")
-        return soup
+        return BeautifulSoup(data.text, "html.parser")
 
     def scrape_rank(self):
         """
@@ -71,7 +70,7 @@ class LeetCode:
         \n
         """
         if self.username == "":
-            message = f"username is not given"
+            message = "username is not given"
             return {"data": None, "message": message}
 
         soup = self.user_profile
@@ -103,7 +102,7 @@ class LeetCode:
         \n
         """
         if self.username == "":
-            message = f"username is not given"
+            message = "username is not given"
             return {"data": None, "message": message}
 
         soup = self.user_profile
@@ -138,7 +137,7 @@ class LeetCode:
         \n
         """
         if self.username == "":
-            message = f"username is not given"
+            message = "username is not given"
             return {"data": None, "message": message}
 
         soup = self.user_profile
@@ -169,7 +168,7 @@ class LeetCode:
         \n
         """
         if self.username == "":
-            message = f"username is not given"
+            message = "username is not given"
             return {"data": None, "message": message}
 
         soup = self.user_profile
@@ -209,9 +208,7 @@ class LeetCode:
         \n
         """
         if self.username == "":
-            message = f"username is not given"
-            return message
-
+            return "username is not given"
         soup = self.user_profile
         try:
             links = soup.find_all(
@@ -246,9 +243,7 @@ class LeetCode:
         \n
         """
         if self.username == "":
-            message = f"username is not given"
-            return message
-
+            return "username is not given"
         soup = self.user_profile
         try:
             links = soup.find_all(
@@ -283,9 +278,7 @@ class LeetCode:
         \n
         """
         if self.username == "":
-            message = f"username is not given"
-            return message
-
+            return "username is not given"
         soup = self.user_profile
         try:
             stats = soup.find_all(
@@ -318,16 +311,16 @@ class LeetCode:
         url = "https://leetcode.com/problemset/all/?"
 
         if difficulty != "":
-            url += "difficulty=" + difficulty.upper()
+            url += f"difficulty={difficulty.upper()}"
 
         if len(tags) > 0:
-            url += "&topicSlugs=" + tags[0]
+            url += f"&topicSlugs={tags[0]}"
 
             for i in range(1, len(tags)):
-                url += "%2C" + tags[i]
+                url += f"%2C{tags[i]}"
 
         if search_key != "":
-            url += "&search=" + search_key
+            url += f"&search={search_key}"
 
         self.driver.get(url)
         self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "space-x-1")))
@@ -353,9 +346,9 @@ class LeetCode:
                 problem_url = "https://leetcode.com" + problem["href"]
                 problems_list.append({"title": problem_title, "link": problem_url})
 
-            return {"data": problems_list, "message": f"Found problems list"}
+            return {"data": problems_list, "message": "Found problems list"}
         except:
-            message = f"Failed to scrape problems for given filters"
+            message = "Failed to scrape problems for given filters"
             return {"data": None, "message": message}
 
     def get_contests(self):
@@ -379,18 +372,16 @@ class LeetCode:
                 {"class": "swiper-wrapper"},
             ).find_all("div", {"class": "h-[54px]"})
 
-            contest_list = []
-            for contest in contests:
-                contest_list.append(
-                    {
-                        "title": contest.div.text,
-                        "date": contest.text.replace(contest.div.text, ""),
-                    }
-                )
-
-            return {"data": contest_list, "message": f"Found contest list"}
+            contest_list = [
+                {
+                    "title": contest.div.text,
+                    "date": contest.text.replace(contest.div.text, ""),
+                }
+                for contest in contests
+            ]
+            return {"data": contest_list, "message": "Found contest list"}
         except:
-            message = f"Failed to scrape contest details"
+            message = "Failed to scrape contest details"
             return {"data": None, "message": message}
 
     def get_daily_challenge(self):
@@ -419,9 +410,7 @@ class LeetCode:
             self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "_1l1MA")))
             soup = BeautifulSoup(self.driver.page_source, "html.parser")
 
-            daily_challenge = {}
-            daily_challenge["title"] = daily.text
-
+            daily_challenge = {"title": daily.text}
             difficulty = soup.find("div", class_="rounded-[21px]").text
             daily_challenge["difficulty"] = difficulty
 
@@ -450,10 +439,7 @@ class LeetCode:
             ).find("ul")
             daily_challenge["constraints"] = constraints.text
 
-            return {
-                "data": daily_challenge,
-                "message": f"Found daily challenge problem",
-            }
+            return {"data": daily_challenge, "message": "Found daily challenge problem"}
         except:
             return None
 

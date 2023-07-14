@@ -12,8 +12,7 @@ class PullRequest:
         url = f"https://gitlab.com/{self.username}/{self.repository}/-/merge_requests/{self.pull_request_number}"
         response = requests.get(url)
         response.raise_for_status()
-        soup = BeautifulSoup(response.text, "html.parser")
-        return soup
+        return BeautifulSoup(response.text, "html.parser")
 
     def get_title(self):
         try:

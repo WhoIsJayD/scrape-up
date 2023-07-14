@@ -35,26 +35,22 @@ class Spotify:
             search_box.send_keys(keyword)
             search_box.send_keys(Keys.RETURN)
 
-            songs = []
-            for song in self.driver.find_elements(
-                By.XPATH,
-                "//div[@class='search-results']/section//div[@data-testid='tracklist-row']",
-            ):
-                songs.append(
-                    {
-                        "name": song.find_element(
-                            By.XPATH,
-                            ".//span[@data-testid='tracklist-row__track-name']",
-                        ).text,
-                        "artist": song.find_element(
-                            By.XPATH,
-                            ".//span[@data-testid='tracklist-row__artist-name-link']",
-                        ).text,
-                    }
+            return [
+                {
+                    "name": song.find_element(
+                        By.XPATH,
+                        ".//span[@data-testid='tracklist-row__track-name']",
+                    ).text,
+                    "artist": song.find_element(
+                        By.XPATH,
+                        ".//span[@data-testid='tracklist-row__artist-name-link']",
+                    ).text,
+                }
+                for song in self.driver.find_elements(
+                    By.XPATH,
+                    "//div[@class='search-results']/section//div[@data-testid='tracklist-row']",
                 )
-
-            return songs
-
+            ]
         except Exception as e:
             return None
 
@@ -80,25 +76,21 @@ class Spotify:
             self.driver.get("https://open.spotify.com/")
             self.driver.implicitly_wait(100)
 
-            playlists = []
-            for song in self.driver.find_elements(
-                By.XPATH, "//div[@data-testid='tracklist-row']"
-            ):
-                playlists.append(
-                    {
-                        "name": song.find_element(
-                            By.XPATH,
-                            ".//span[@data-testid='tracklist-row__track-name']",
-                        ).text,
-                        "artist": song.find_element(
-                            By.XPATH,
-                            ".//span[@data-testid='tracklist-row__artist-name-link']",
-                        ).text,
-                    }
+            return [
+                {
+                    "name": song.find_element(
+                        By.XPATH,
+                        ".//span[@data-testid='tracklist-row__track-name']",
+                    ).text,
+                    "artist": song.find_element(
+                        By.XPATH,
+                        ".//span[@data-testid='tracklist-row__artist-name-link']",
+                    ).text,
+                }
+                for song in self.driver.find_elements(
+                    By.XPATH, "//div[@data-testid='tracklist-row']"
                 )
-
-            return playlists
-
+            ]
         except Exception as e:
             return None
 

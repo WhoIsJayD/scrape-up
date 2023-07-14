@@ -52,8 +52,7 @@ class Internshala:
             Exception: If an error occurs while parsing the page.
         """
         try:
-            soup = BeautifulSoup(html, "lxml")
-            return soup
+            return BeautifulSoup(html, "lxml")
         except Exception as e:
             raise Exception(f"An error occurred while parsing the page: {str(e)}")
 

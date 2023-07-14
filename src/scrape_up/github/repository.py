@@ -115,8 +115,7 @@ class Repository:
 
         try:
             tag = data.find(class_="f4 mb-3")
-            about = tag.get_text()
-            return about
+            return tag.get_text()
         except:
             return None
 
@@ -135,8 +134,7 @@ class Repository:
                 "ul", class_="pagehead-actions flex-shrink-0 d-none d-md-inline"
             )
             forks = stats_body.find("span", id="repo-network-counter")
-            fork_count = forks.text.strip()
-            return fork_count
+            return forks.text.strip()
         except:
             return None
 
@@ -155,8 +153,7 @@ class Repository:
             topics = data.find_all(class_="topic-tag topic-tag-link")
             allTopics = []
             print(allTopics)
-            for item in topics:
-                allTopics.append(item.text)
+            allTopics.extend(item.text for item in topics)
             return allTopics
         except:
             return None
@@ -172,12 +169,13 @@ class Repository:
         """
         try:
             data = self.__scrape_page()
-            starCount = (
-                data.find("a", href=f"/{self.username}/{self.repository}/stargazers")
+            return (
+                data.find(
+                    "a", href=f"/{self.username}/{self.repository}/stargazers"
+                )
                 .find("span")
                 .text.strip()
             )
-            return starCount
         except:
             return None
 
@@ -192,12 +190,11 @@ class Repository:
         """
         data = self.__scrape_page()
         try:
-            pull_requests = (
+            return (
                 data.find_all(class_="UnderlineNav-item mr-0 mr-md-1 mr-lg-3")[2]
                 .find_all("span")[1]
                 .text.strip()
             )
-            return pull_requests
         except:
             return None
 
@@ -213,10 +210,7 @@ class Repository:
         data = self.__scrape_tags_page()
         try:
             tags = data.find_all(class_="Link--primary")
-            allTags = []
-            for item in tags:
-                allTags.append(item.text)
-            return allTags
+            return [item.text for item in tags]
         except:
             return None
 
@@ -232,10 +226,7 @@ class Repository:
         data = self.__scrape_tags_page()
         try:
             releases = data.find_all(class_="Link--primary")
-            allReleases = []
-            for item in releases:
-                allReleases.append(item.text)
-            return allReleases
+            return [item.text for item in releases]
         except:
             return None
 
@@ -250,8 +241,7 @@ class Repository:
         """
         data = self.__scrape_page()
         try:
-            issues = data.find("span", {"id": "issues-repo-tab-count"}).text.strip()
-            return issues
+            return data.find("span", {"id": "issues-repo-tab-count"}).text.strip()
         except:
             return None
 
@@ -317,8 +307,7 @@ class Repository:
             commits = str(data.find_all(class_="d-none d-sm-inline"))
             s = commits.split("<strong>")
             s = s[1].split("</strong>")
-            commits = int(s[0])
-            return commits
+            return int(s[0])
         except:
             return None
 
@@ -336,11 +325,7 @@ class Repository:
             issues = data.find_all(
                 class_="Link--primary v-align-middle no-underline h4 js-navigation-open markdown-title"
             )
-            allIssues = []
-
-            for item in issues:
-                allIssues.append(item.text)
-            return allIssues
+            return [item.text for item in issues]
         except:
             return None
 
@@ -359,9 +344,7 @@ class Repository:
             contributors = data.find_all(
                 "a", href=f"/{self.username}/{self.repository}/graphs/contributors"
             )
-            contributor = []
-            for it in contributors:
-                contributor.append(it.get_text())
+            contributor = [it.get_text() for it in contributors]
             return contributor[0].strip()
         except:
             return None
@@ -411,10 +394,9 @@ class Repository:
             except OSError as error:
                 return None
             data = data.text
-            readmeFile = os.open(path + "/README.md", os.O_RDWR | os.O_CREAT)
+            readmeFile = os.open(f"{path}/README.md", os.O_RDWR | os.O_CREAT)
             os.write(readmeFile, data.encode("utf-8"))
-            message = "README.md found & saved"
-            return message
+            return "README.md found & saved"
 
     def get_environment(self):
         """
@@ -427,10 +409,9 @@ class Repository:
         """
         try:
             data = self.__scrape_deployments_page()
-            link = data.find(
+            return data.find(
                 "a", class_="btn btn-outline flex-self-start mt-2 mt-md-0"
             ).get("href")
-            return link
         except:
             return None
 
@@ -451,10 +432,7 @@ class Repository:
             branch = data.find_all(
                 class_="branch-name css-truncate-target v-align-baseline width-fit mr-2 Details-content--shown"
             )
-            allBranches = []
-            for branchNames in branch:
-                allBranches.append(branchNames.text.strip())
-            return allBranches
+            return [branchNames.text.strip() for branchNames in branch]
         except:
             return None
 
@@ -495,10 +473,6 @@ class Repository:
             all = data.find("ol", {"class": "gutter"}).find_all(
                 "a", {"data-hovercard-type": "user"}
             )[1::2]
-            watchers = []
-            for watcher in all:
-                watchers.append(watcher.text.strip())
-            return watchers
-
+            return [watcher.text.strip() for watcher in all]
         except:
             return None

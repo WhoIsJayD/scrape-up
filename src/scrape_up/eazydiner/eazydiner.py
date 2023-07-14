@@ -65,17 +65,15 @@ class EazyDiner:
                         "location": location,
                         "rating": rating,
                         "cuisine": cuisine,
-                        "price": "Rs. " + price + " for two",
+                        "price": f"Rs. {price} for two",
                     }
                 )
-            res_json = json.dumps(restaurant_data)
-            return res_json
+            return json.dumps(restaurant_data)
         except:
             error_message = {
                 "message": "There are no restaurants in the given location."
             }
-            ejson = json.dumps(error_message)
-            return ejson
+            return json.dumps(error_message)
 
     def getBreakfast(self):
         """
@@ -126,17 +124,15 @@ class EazyDiner:
                         "location": location,
                         "rating": rating,
                         "cuisine": cuisine,
-                        "price": "Rs. " + price + " for two",
+                        "price": f"Rs. {price} for two",
                     }
                 )
-            res_json = json.dumps(restaurant_data)
-            return res_json
+            return json.dumps(restaurant_data)
         except:
             error_message = {
                 "message": "There are no restaurants in the given location."
             }
-            ejson = json.dumps(error_message)
-            return ejson
+            return json.dumps(error_message)
 
     def getLunch(self):
         """
@@ -187,17 +183,15 @@ class EazyDiner:
                         "location": location,
                         "rating": rating,
                         "cuisine": cuisine,
-                        "price": "Rs. " + price + " for two",
+                        "price": f"Rs. {price} for two",
                     }
                 )
-            res_json = json.dumps(restaurant_data)
-            return res_json
+            return json.dumps(restaurant_data)
         except:
             error_message = {
                 "message": "There are no restaurants in the given location."
             }
-            ejson = json.dumps(error_message)
-            return ejson
+            return json.dumps(error_message)
 
     def getDinner(self):
         """
@@ -248,14 +242,12 @@ class EazyDiner:
                         "location": location,
                         "rating": rating,
                         "cuisine": cuisine,
-                        "price": "Rs. " + price + " for two",
+                        "price": f"Rs. {price} for two",
                     }
                 )
-            res_json = json.dumps(restaurant_data)
-            return res_json
+            return json.dumps(restaurant_data)
         except:
             error_message = {
                 "message": "There are no restaurants in the given location."
             }
-            ejson = json.dumps(error_message)
-            return ejson
+            return json.dumps(error_message)

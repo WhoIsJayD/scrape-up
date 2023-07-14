@@ -85,9 +85,6 @@ class NSE:
                 symbol=self.stock_symbol, from_date=from_date, to_date=to_date
             )
         ).json()["data"]
-        historical_price_data = {}
-        for i in historical_price_data_raw:
-            historical_price_data[i["mTIMESTAMP"]] = i["VWAP"]
-        return historical_price_data
+        return {i["mTIMESTAMP"]: i["VWAP"] for i in historical_price_data_raw}
 
 

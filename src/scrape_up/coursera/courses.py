@@ -17,7 +17,7 @@ class Coursera:
         options.add_argument("--headless")
         driver = webdriver.Chrome(service=Service(chromedriver_path), options=options)
         wait = WebDriverWait(driver, 10)
-        driver.get("https://www.coursera.org/search?query=" + self.keyword)
+        driver.get(f"https://www.coursera.org/search?query={self.keyword}")
         return wait, driver
 
     def titles(self):
@@ -37,7 +37,7 @@ class Coursera:
         wait, driver = self.__scrape_page()
         titles = []
         try:
-            for i in range(self.page_count):
+            for _ in range(self.page_count):
                 courses = wait.until(
                     EC.visibility_of_all_elements_located(
                         (By.CSS_SELECTOR, "main ul>li")

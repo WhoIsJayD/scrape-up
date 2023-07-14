@@ -45,10 +45,12 @@ class Flipkart:
                 rating = data.find("div", attrs={"class": "_3LWZlK"})
                 specification = data.find("div", attrs={"class": "fMghEO"})
 
-                specs = []
-                for spec in specification.find_all("li", attrs={"class": "rgWa7D"}):
-                    specs.append(spec.text)
-
+                specs = [
+                    spec.text
+                    for spec in specification.find_all(
+                        "li", attrs={"class": "rgWa7D"}
+                    )
+                ]
                 item_details = {
                     "Item_Name": names.text,
                     "Price": price.text,
@@ -177,7 +179,7 @@ class Flipkart:
             return all_items
 
         except Exception as e:
-            print("Error:", str(e))
+            print("Error:", e)
             return None
 
     def laptops(self):

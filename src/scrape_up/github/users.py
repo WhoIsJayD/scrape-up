@@ -124,8 +124,7 @@ class Users:
             pinned_repos = page.find_all(
                 class_="mb-3 d-flex flex-content-stretch col-12 col-md-6 col-lg-6"
             )
-            titles = [repo.find("span", class_="repo").text for repo in pinned_repos]
-            return titles
+            return [repo.find("span", class_="repo").text for repo in pinned_repos]
         except:
             return None
 
@@ -208,10 +207,12 @@ class Users:
             repo_body = page.find("div", id="user-repositories-list")
             repositories = []
             if repo_body != None:
-                for repo in repo_body.find_all(
-                    "div", class_="col-10 col-lg-9 d-inline-block"
-                ):
-                    repositories.append("https://github.com" + repo.a["href"])
+                repositories.extend(
+                    "https://github.com" + repo.a["href"]
+                    for repo in repo_body.find_all(
+                        "div", class_="col-10 col-lg-9 d-inline-block"
+                    )
+                )
             return repositories
         except:
             return None
@@ -227,8 +228,7 @@ class Users:
         """
         page = self.__scrape_page()
         try:
-            orgs = [org.login for org in page.get_orgs()]
-            return orgs
+            return [org.login for org in page.get_orgs()]
         except:
             return None
 
@@ -248,7 +248,7 @@ class Users:
             itr = 0
             while itr < len(data) / 2:
                 achievement.append(data[itr]["alt"].split(":")[1].strip(" "))
-                itr = itr + 1
+                itr += 1
 
             return achievement
         except:
@@ -277,11 +277,13 @@ class Users:
             starred_body = page.find("turbo-frame", id="user-starred-repos")
             starred_repos = []
             if starred_body != None:
-                for repo in starred_body.find_all(
-                    "div",
-                    class_="col-12 d-block width-full py-4 border-bottom color-border-muted",
-                ):
-                    starred_repos.append("https://github.com" + repo.a["href"])
+                starred_repos.extend(
+                    "https://github.com" + repo.a["href"]
+                    for repo in starred_body.find_all(
+                        "div",
+                        class_="col-12 d-block width-full py-4 border-bottom color-border-muted",
+                    )
+                )
             return starred_repos
         except:
             return None
@@ -307,11 +309,12 @@ class Users:
         page = self.__scrape_followers_page()
         try:
             followers_body = page.find("turbo-frame", id="user-profile-frame")
-            followers = []
-            for user in followers_body.find_all("span", class_="Link--secondary"):
-                followers.append(user.text.strip())
-
-            return followers
+            return [
+                user.text.strip()
+                for user in followers_body.find_all(
+                    "span", class_="Link--secondary"
+                )
+            ]
         except:
             return None
 
@@ -337,11 +340,12 @@ class Users:
         page = self.__scrape_following_page()
         try:
             following_body = page.find("turbo-frame", id="user-profile-frame")
-            following = []
-            for user in following_body.find_all("span", class_="Link--secondary"):
-                following.append(user.text.strip())
-
-            return following
+            return [
+                user.text.strip()
+                for user in following_body.find_all(
+                    "span", class_="Link--secondary"
+                )
+            ]
         except:
             return None
 
@@ -384,8 +388,7 @@ class Users:
             t = data.find_all("rect", class_="ContributionCalendar-day")
             array = []
             for a in t:
-                contri = a.get_text()
-                if contri:
+                if contri := a.get_text():
                     if contri[0] == "N":
                         array.append(0)
                     else:
@@ -531,7 +534,7 @@ class Users:
                 # description= description.replace('\n','')
                 repositories.append(description)
 
-                url1 = "https://github.com" + link
+                url1 = f"https://github.com{link}"
                 response1 = requests.get(url1)
                 soup = BeautifulSoup(response1.content, "html.parser")
                 li_elements = soup.find_all("li", class_="d-inline")
@@ -544,8 +547,8 @@ class Users:
                     num_of_stars = stars.text if stars else "N/A"
                     repositories.append(num_of_stars.replace("\n", ""))
 
-                pullurl = url1 + "/pulls"
-                issuesurl = url1 + "/issues"
+                pullurl = f"{url1}/pulls"
+                issuesurl = f"{url1}/issues"
                 pullresponse = requests.get(
                     pullurl
                 )  # getting the content of pull requests page
@@ -591,15 +594,13 @@ class Users:
             url = f"https://api.github.com/search/issues?q=type:pr+author:{self.username}+is:merged"
             results = requests.get(url).json()
 
-            pull_requests = []
-            for result in results["items"]:
-                pull_requests.append(
-                    {
-                        "pr_url": result["url"],
-                        "repo_url": result["repository_url"],
-                        "title": result["title"],
-                    }
-                )
-            return pull_requests
+            return [
+                {
+                    "pr_url": result["url"],
+                    "repo_url": result["repository_url"],
+                    "title": result["title"],
+                }
+                for result in results["items"]
+            ]
         except:
             return None
