@@ -42,7 +42,7 @@ class StackOverflow:
             "description": description of the question
         }
         """
-        url = "https://stackoverflow.com/questions/tagged/" + self.topic + "?tab=Newest"
+        url = f"https://stackoverflow.com/questions/tagged/{self.topic}?tab=Newest"
         try:
             res = requests.get(url)
             soup = BeautifulSoup(res.text, "html.parser")
@@ -73,13 +73,11 @@ class StackOverflow:
                         "description": desc,
                     }
                 )
-            json_data = json.dumps(questions_data)
-            return json_data
+            return json.dumps(questions_data)
         except:
             error_message = {"message": "No questions related to the topic found"}
 
-            ejson = json.dumps(error_message)
-            return ejson
+            return json.dumps(error_message)
 
     def getActiveQuestions(self):
         """
@@ -99,7 +97,7 @@ class StackOverflow:
             "description": description of the question
         }
         """
-        url = "https://stackoverflow.com/questions/tagged/" + self.topic + "?tab=Active"
+        url = f"https://stackoverflow.com/questions/tagged/{self.topic}?tab=Active"
         try:
             res = requests.get(url)
             soup = BeautifulSoup(res.text, "html.parser")
@@ -130,8 +128,7 @@ class StackOverflow:
                         "description": desc,
                     }
                 )
-            questions_list = questions_data["questions"]
-            return questions_list
+            return questions_data["questions"]
         except:
             return None
 
@@ -153,9 +150,7 @@ class StackOverflow:
             "description": description of the question
         }
         """
-        url = (
-            "https://stackoverflow.com/questions/tagged/" + self.topic + "?tab=Bounties"
-        )
+        url = f"https://stackoverflow.com/questions/tagged/{self.topic}?tab=Bounties"
         try:
             res = requests.get(url)
             soup = BeautifulSoup(res.text, "html.parser")
@@ -186,8 +181,7 @@ class StackOverflow:
                         "description": desc,
                     }
                 )
-            questions_list = questions_data["questions"]
-            return questions_list
+            return questions_data["questions"]
         except:
             return None
 
@@ -244,8 +238,7 @@ class StackOverflow:
                         "description": desc,
                     }
                 )
-            questions_list = questions_data["questions"]
-            return questions_list
+            return questions_data["questions"]
         except:
             return None
 
@@ -267,9 +260,7 @@ class StackOverflow:
             "description": description of the question
         }
         """
-        url = (
-            "https://stackoverflow.com/questions/tagged/" + self.topic + "?tab=Frequent"
-        )
+        url = f"https://stackoverflow.com/questions/tagged/{self.topic}?tab=Frequent"
         try:
             res = requests.get(url)
             soup = BeautifulSoup(res.text, "html.parser")
@@ -300,8 +291,7 @@ class StackOverflow:
                         "description": desc,
                     }
                 )
-            questions_list = questions_data["questions"]
-            return questions_list
+            return questions_data["questions"]
         except:
             return None
 
@@ -323,7 +313,7 @@ class StackOverflow:
             "description": description of the question
         }
         """
-        url = "https://stackoverflow.com/questions/tagged/" + self.topic + "?tab=Votes"
+        url = f"https://stackoverflow.com/questions/tagged/{self.topic}?tab=Votes"
         try:
             res = requests.get(url)
             soup = BeautifulSoup(res.text, "html.parser")
@@ -354,8 +344,7 @@ class StackOverflow:
                         "description": desc,
                     }
                 )
-            questions_list = questions_data["questions"]
-            return questions_list
+            return questions_data["questions"]
         except:
             return None
 

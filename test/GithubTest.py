@@ -16,16 +16,13 @@ class UserTest():
         return following
 
     def test_get_avatar(self):
-        avatar = self.user.get_avatar()
-        return avatar  
+        return self.user.get_avatar()  
 
     def test_get_bio(self):
-        bio = self.user.get_bio()
-        return bio
+        return self.user.get_bio()
 
     def test_get_repo(self):
-        repos = self.user.get_repo()
-        return repos
+        return self.user.get_repo()
 
     def test_repo_count(self):
         repo_count = self.user.repo_count()
@@ -36,52 +33,40 @@ class UserTest():
         return star_count
 
     def test_get_yearly_contributions(self):
-        contributions = self.user.get_yearly_contributions()
-        return contributions
+        return self.user.get_yearly_contributions()
 
     def test_get_repositories(self):
-        repositories = self.user.get_repositories()
-        return repositories
+        return self.user.get_repositories()
 
     def test_get_starred_repos(self):
-        starred_repos = self.user.get_starred_repos()
-        return starred_repos
+        return self.user.get_starred_repos()
         
     def test_pull_requests(self):
-        pull_requests = self.user.pul_requests()
-        return pull_requests
+        return self.user.pul_requests()
 
     def test_get_followers(self):
-        followers = self.user.get_followers()
-        return followers
+        return self.user.get_followers()
 
     def test_get_following_users(self):
-        following_users = self.user.get_following_users()
-        return following_users
+        return self.user.get_following_users()
 
     def test_get_achievements(self):
-        achievements = self.user.get_achievements()
-        return achievements
+        return self.user.get_achievements()
 
     def test_get_status(self):
-        status = self.user.get_status()
-        return status
+        return self.user.get_status()
         
     def test_get_contribution_streak(self):
-        contribution_streak = self.user.get_contribution_streak()
-        return contribution_streak
+        return self.user.get_contribution_streak()
         
     def test_get_repository_details(self):
-        repository_details = self.user.get_repository_details()
-        return repository_details
+        return self.user.get_repository_details()
         
     def test_get_branch(self):
-        branches = self.user.get_branch()
-        return branches
+        return self.user.get_branch()
 
     def test_get_merged_pull_requests(self):
-        merged_pull_requests = self.user.get_merged_pull_requests()
-        return merged_pull_requests
+        return self.user.get_merged_pull_requests()
 
 class RepositoryTest:
 
@@ -96,8 +81,7 @@ class RepositoryTest:
         return fork_count
 
     def test_get_contributors(self):
-        contributors = self.repository.get_contributors()
-        return contributors
+        return self.repository.get_contributors()
     
     def test_topics(self):
         topics = self.repository.topics()
@@ -108,8 +92,7 @@ class RepositoryTest:
         return pull_requests
 
     def test_last_updated_at(self):
-        last_updated_at = self.repository.last_update_at()
-        return last_updated_at
+        return self.repository.last_update_at()
 
     def test_tags(self):
         tags = self.repository.tags()
@@ -124,36 +107,30 @@ class RepositoryTest:
         return issues_count        
 
     def test_readme(self):
-        readme_path = self.repository.readme()
-        return readme_path
+        return self.repository.readme()
 
     def test_get_pull_requests_ids(self):
-        pull_requests_ids = self.repository.get_pull_requests_ids()
-        return pull_requests_ids
+        return self.repository.get_pull_requests_ids()
 
     def test_get_issues(self):
-        issues = self.repository.get_issues()
-        return issues
+        return self.repository.get_issues()
 
     def test_commits(self):
         commits = self.repository.commits()
         return commits    
 
     def test_get_readme(self):
-        readme = self.repository.get_readme()
-        return readme
+        return self.repository.get_readme()
 
     def test_get_environment(self):
-        environment = self.repository.get_environment()
-        return environment    
+        return self.repository.get_environment()    
 
     def test_watch_count(self):
         watch_count = self.repository.watch_count()
         return watch_count
 
     def test_all_watchers(self):
-        watchers = self.repository.all_watchers()
-        return watchers
+        return self.repository.all_watchers()
 
 class IssueTest:
 
@@ -181,8 +158,7 @@ class IssueTest:
         return title
 
     def test_is_milestone(self):
-        milestone = self.issue.is_milestone()
-        return milestone
+        return self.issue.is_milestone()
 
     def test_opened_at(self):
         opened_at = self.issue.opened_at()
@@ -253,8 +229,7 @@ class OrganizationTest:
         return peoples
 
     def test_get_location(self):
-        location = self.organization.get_location()
-        return location
+        return self.organization.get_location()
 
     def test_repository_details(self):
         repository_details = self.organization.repository_details()
@@ -265,5 +240,4 @@ class OrganizationTest:
         return pinned_repository
 
     def test_get_organization_links(self):
-        organization_links = self.organization.get_organization_links()
-        return organization_links
+        return self.organization.get_organization_links()

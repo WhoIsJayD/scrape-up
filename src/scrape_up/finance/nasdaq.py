@@ -82,15 +82,9 @@ class NASDAQ:
                 "rateChange": float(price_info["netChange"]),
                 "pChange": float(price_info["percentageChange"][:-1]),
             }
-            return {
-                "data": data,
-                "message": f"Latest price of the stock has been fetched",
-            }
+            return {"data": data, "message": "Latest price of the stock has been fetched"}
         except:
-            return {
-                "data": None,
-                "message": f"Not able to fetch latest price of the stock",
-            }
+            return {"data": None, "message": "Not able to fetch latest price of the stock"}
 
     # Please give dates in DD-MM-YYYY format
     def get_historical_data(self, from_date, to_date):
@@ -127,12 +121,12 @@ class NASDAQ:
                 historical_price_data[date_formatted] = float(i["open"][1:])
             return {
                 "data": historical_price_data,
-                "message": f"Sucessfylly scrapped the historic data of the stock.",
+                "message": "Sucessfylly scrapped the historic data of the stock.",
             }
         except:
             return {
                 "data": None,
-                "message": f"Not able to fetch historical data of the stock.",
+                "message": "Not able to fetch historical data of the stock.",
             }
 
 

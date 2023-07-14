@@ -43,14 +43,11 @@ class Organization:
         ```
         """
         try:
-            languages = []
             data = self.__scrape_page()
             lang_raw = data.find_all(
                 "a", class_="no-wrap color-fg-muted d-inline-block Link--muted mt-2"
             )
-            for lang in lang_raw:
-                languages.append(lang.get_text().strip())
-            return languages
+            return [lang.get_text().strip() for lang in lang_raw]
         except:
             return None
 
@@ -66,10 +63,7 @@ class Organization:
         page = self.__scrape_page()
         try:
             all_topics = page.find_all(class_="topic-tag topic-tag-link")
-            topics = []
-            for topic in all_topics:
-                topics.append(topic.text.strip())
-            return topics
+            return [topic.text.strip() for topic in all_topics]
         except:
             return None
 
@@ -87,8 +81,7 @@ class Organization:
             followers_body = page.find(
                 "a", class_="Link--secondary no-underline no-wrap"
             )
-            followers = followers_body.span.text.strip()
-            return followers
+            return followers_body.span.text.strip()
         except:
             return None
 
@@ -104,8 +97,7 @@ class Organization:
         page = self.__scrape_page()
         try:
             avatar = page.find("a", attrs={"itemprop": "url"})
-            avatar_url = avatar.text.strip()
-            return avatar_url
+            return avatar.text.strip()
         except:
             return None
 
@@ -140,28 +132,28 @@ class Organization:
         try:
             pages_body = data.find("div", class_="paginate-container")
             current_page = pages_body.find("em", class_="current")
-            total_pages = 1
-            if current_page != None:
+            if current_page is None:
+                total_pages = 1
+            else:
                 total_pages = (int)(current_page["data-total-pages"])
-
             pages = []
             if total_pages == 1:
                 pages.append(f"https://github.com/orgs/{organization}/repositories")
             else:
-                for i in range(1, total_pages + 1):
-                    pages.append(
-                        f"https://github.com/orgs/{organization}/repositories?page={i}"
-                    )
-
+                pages.extend(
+                    f"https://github.com/orgs/{organization}/repositories?page={i}"
+                    for i in range(1, total_pages + 1)
+                )
             repositories = []
             for page in pages:
                 page_data = self.__scrape_repositories(page)
                 repositories_body = page_data.find("div", id="org-repositories")
-                for repo in repositories_body.find_all(
-                    "a", attrs={"itemprop": "name codeRepository"}
-                ):
-                    repositories.append(repo.text.strip())
-
+                repositories.extend(
+                    repo.text.strip()
+                    for repo in repositories_body.find_all(
+                        "a", attrs={"itemprop": "name codeRepository"}
+                    )
+                )
             return repositories
         except:
             return None
@@ -204,19 +196,18 @@ class Organization:
         try:
             pages_body = data.find("div", class_="paginate-container")
             current_page = pages_body.find("em", class_="current")
-            total_pages = 1
-            if current_page != None:
+            if current_page is None:
+                total_pages = 1
+            else:
                 total_pages = (int)(current_page["data-total-pages"])
-
             pages = []
             if total_pages == 1:
                 pages.append(f"https://github.com/orgs/{organization}/people")
             else:
-                for i in range(1, total_pages + 1):
-                    pages.append(
-                        f"https://github.com/orgs/{organization}/people?page={i}"
-                    )
-
+                pages.extend(
+                    f"https://github.com/orgs/{organization}/people?page={i}"
+                    for i in range(1, total_pages + 1)
+                )
             peoples = []
             for page in pages:
                 page_data = self.__scrape_people(page)
@@ -242,20 +233,19 @@ class Organization:
         try:
             body = data.find("div", class_="paginate-container")
             current_page = body.find("em", class_="current")
-            page_count = 1
-            if current_page != None:
+            if current_page is None:
+                page_count = 1
+            else:
                 page_count = int((current_page["data-total-pages"]))
-
             pages = []
 
             if page_count == 1:
                 pages.append(f"https://github.com/orgs/{self.organization}/people")
             else:
-                for i in range(1, page_count + 1):
-                    pages.append(
-                        f"https://github.com/orgs/{self.organization}/people?page={i}"
-                    )
-
+                pages.extend(
+                    f"https://github.com/orgs/{self.organization}/people?page={i}"
+                    for i in range(1, page_count + 1)
+                )
             people_count = 0
             for page in pages:
                 page_data = self.__scrape_people(page)
@@ -327,19 +317,18 @@ class Organization:
         try:
             pages_body = data.find("div", class_="paginate-container")
             current_page = pages_body.find("em", class_="current")
-            total_pages = 1
-            if current_page != None:
+            if current_page is None:
+                total_pages = 1
+            else:
                 total_pages = (int)(current_page["data-total-pages"])
-
             pages = []
             if total_pages == 1:
                 pages.append(f"https://github.com/orgs/{organization}/repositories")
             else:
-                for i in range(1, total_pages + 1):
-                    pages.append(
-                        f"https://github.com/orgs/{organization}/repositories?page={i}"
-                    )
-
+                pages.extend(
+                    f"https://github.com/orgs/{organization}/repositories?page={i}"
+                    for i in range(1, total_pages + 1)
+                )
             repositories = []
             for page in pages:
                 page_data = self.__scrape_repositories(page)
@@ -465,12 +454,11 @@ class Organization:
         ```
         """
         try:
-            links = {}
             data = self.__scrape_page()
             website_link = data.find("a", rel="nofollow", itemprop="url", href=True)[
                 "href"
             ]
-            links["website"] = website_link
+            links = {"website": website_link}
             gmail = data.find("a", itemprop="email", href=True)["href"]
             links["gmail"] = gmail
             other_link = data.find_all("a", rel="nofollow", href=True)
@@ -483,7 +471,7 @@ class Organization:
                     .split(".")[0]
                 )
                 if name != self.organization or name.find(self.organization) == -1:
-                    if not name in links:
+                    if name not in links:
                         links[name] = o["href"]
             return links
         except:

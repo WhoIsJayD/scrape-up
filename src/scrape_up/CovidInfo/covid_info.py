@@ -53,10 +53,7 @@ class CovidInfo:
 
             except StopIteration:
                 break
-        if len(response_data) == 1:
-            return None
-        else:
-            return response_data
+        return None if len(response_data) == 1 else response_data
 
     def total_cases(self):
         """

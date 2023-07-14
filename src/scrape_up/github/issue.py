@@ -45,11 +45,13 @@ class Issue:
         data = self.__scrape_page()
         try:
             assignees_body = data.find("span", class_="css-truncate js-issue-assignees")
-            assignees = []
-            for assignee in assignees_body.find_all(
-                "a", class_="assignee Link--primary css-truncate-target width-fit"
-            ):
-                assignees.append(assignee.text.replace("\n", "").strip())
+            assignees = [
+                assignee.text.replace("\n", "").strip()
+                for assignee in assignees_body.find_all(
+                    "a",
+                    class_="assignee Link--primary css-truncate-target width-fit",
+                )
+            ]
             assignees
         except:
             None
@@ -70,9 +72,7 @@ class Issue:
             allLabelsHtml = labelsDiv.find_all(
                 class_="css-truncate css-truncate-target width-fit"
             )
-            allLabels = []
-            for label in allLabelsHtml:
-                allLabels.append(label.text)
+            allLabels = [label.text for label in allLabelsHtml]
             allLabels
         except:
             return None
@@ -107,8 +107,7 @@ class Issue:
         data = self.__scrape_page()
         try:
             title_body = data.find("bdi", class_="js-issue-title markdown-title")
-            title = title_body.text.strip()
-            return title
+            return title_body.text.strip()
         except:
             return None
 
@@ -140,9 +139,8 @@ class Issue:
         """
         data = self.__scrape_page()
         try:
-            milestone = data.find(
+            return data.find(
                 "a", class_="Link--secondary mt-1 d-block text-bold css-truncate"
             ).text.strip()
-            return milestone
         except:
             return None

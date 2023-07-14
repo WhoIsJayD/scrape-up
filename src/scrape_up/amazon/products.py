@@ -36,16 +36,10 @@ class Product:
             soup = BeautifulSoup(r.content, "html.parser")
             product = soup.find("div", {"class": "s-product-image-container"})
             product_link = product.find("a", {"class": "a-link-normal"})["href"]
-            product_link = "https://www.amazon.in" + product_link
-            return {
-                "data": product_link,
-                "message": f"Product data has been fetched",
-            }
+            product_link = f"https://www.amazon.in{product_link}"
+            return {"data": product_link, "message": "Product data has been fetched"}
         except:
-            return {
-                "data": None,
-                "message": f"Unable to fetch product's data",
-            }
+            return {"data": None, "message": "Unable to fetch product's data"}
 
     # Get product details
     def get_product_details(self):
@@ -84,15 +78,9 @@ class Product:
                 "product_rating": product_rating,
                 "product_link": product_link,
             }
-            return {
-                "data": product_details,
-                "message": f"Product detail has been fetched",
-            }
+            return {"data": product_details, "message": "Product detail has been fetched"}
         except:
-            return {
-                "data": None,
-                "message": f"Unable to fetch product detail",
-            }
+            return {"data": None, "message": "Unable to fetch product detail"}
 
     # Get product image
     def get_product_image(self):
@@ -124,15 +112,9 @@ class Product:
                 "img", {"class": "a-dynamic-image a-stretch-horizontal"}
             )["src"]
 
-            return {
-                "data": product_image,
-                "message": f"Product image has been fetched",
-            }
+            return {"data": product_image, "message": "Product image has been fetched"}
         except:
-            return {
-                "data": None,
-                "message": f"Unable to fetch product image",
-            }
+            return {"data": None, "message": "Unable to fetch product image"}
 
     # Get customer reviews
     def customer_review(self):
@@ -182,12 +164,6 @@ class Product:
                     "span", {"data-hook": "review-body"}
                 ).text.strip()
                 review = [reviewer_name, rating, review_title, review_date, review_text]
-            return {
-                "data": review,
-                "message": f"Product review has been fetched",
-            }
+            return {"data": review, "message": "Product review has been fetched"}
         except:
-            return {
-                "data": None,
-                "message": f"Unable to fetch product review",
-            }
+            return {"data": None, "message": "Unable to fetch product review"}

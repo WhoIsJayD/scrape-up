@@ -41,22 +41,20 @@ class KooUser:
         res = self.__scrape_page()
         try:
             page = BeautifulSoup(res.text, "html.parser")
-            data = json.loads(page.find("script", attrs={"id": "__NEXT_DATA__"}).text)
-            return data
+            return json.loads(page.find("script", attrs={"id": "__NEXT_DATA__"}).text)
         except Exception as e:
             raise Exception(f"An error occurred while parsing the page: {str(e)}")
 
     def __parse_profile_data(self) -> dict:
         data = self.__parse_page()
         try:
-            userdata = (
+            return (
                 data.get("props")
                 .get("pageProps")
                 .get("initialState")
                 .get("profileReducers")
                 .get("profileItems")
             )
-            return userdata
         except Exception as e:
             raise Exception(f"An error occured while parsing the data: {e}")
 

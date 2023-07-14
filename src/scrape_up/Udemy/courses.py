@@ -33,17 +33,13 @@ class Courses:
 
     def __replace_after_newline(self, text):
         index = text.find("\n")  # Find the index of the first occurrence of '\n'
-        if index != -1:
-            return text[:index]  # Return the substring up to the '\n'
-        else:
-            return text
+        return text[:index] if index != -1 else text
 
     def __remove_html_tags(self, text):
-        clean_text = re.sub("<.*?>", "", text)  # Use regex to remove HTML tags
-        return clean_text
+        return re.sub("<.*?>", "", text)
 
     def __extract_numbers(self, string):
-        if string == None:
+        if string is None:
             return None
         number = re.findall(
             r"\d+", string
@@ -51,7 +47,7 @@ class Courses:
         return number[0]
 
     def __extract_amount(self, string):
-        if string == None:
+        if string is None:
             return None
         rupee_index = string.find("₹")  # Find the index of the "₹" sign
         if rupee_index != -1:
@@ -153,7 +149,7 @@ class Courses:
                         "description": self.__remove_html_tags(description.text),
                         "instructor": instructor,
                         "rating": rating.text,
-                        "reviews": reviews.text[1 : (len(reviews.text) - 1)],
+                        "reviews": reviews.text[1:-1],
                         "discount_price": self.__extract_amount(
                             discount_price if discount_price else None
                         ),
@@ -170,7 +166,7 @@ class Courses:
 
         except Exception as inst:
             return json.dumps(
-                {"data": None, "message": "No courses found for " + self.keyword + ""}
+                {"data": None, "message": f"No courses found for {self.keyword}"}
             )
         finally:
             driver.quit()

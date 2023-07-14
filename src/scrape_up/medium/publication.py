@@ -28,7 +28,6 @@ class Publication:
         Returns the articles of the publication which are arranged in the form of a list
         """
         try:
-            articles = []
             link = self.link
             driver.get(link)
             scroll_pause = 0.5
@@ -56,14 +55,12 @@ class Publication:
                 if scrolled:
                     run_time = 0
                     last_height = new_height
-                elif not scrolled and not timed_out:
+                elif not timed_out:
                     run_time += time.time() - iteration_start
-                elif not scrolled and timed_out:
+                else:
                     break
             elements = driver.find_elements(By.XPATH, "//h2 | //h3")
-            for x in elements:
-                articles.append(x.text)
-            return articles
+            return [x.text for x in elements]
         except:
             return "page/publication not found."
 

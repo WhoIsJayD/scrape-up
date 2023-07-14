@@ -93,14 +93,14 @@ class Video:
             video_data["video_data"].append(
                 {
                     "title": title,
-                    "description": desc[:200] + "...",
+                    "description": f"{desc[:200]}...",
                     "views_count": views,
                     "upload_date": date,
                     "comment_count": comment_count,
                     "channel_name": name,
                     "channel_avatar": avatar,
                     "subscriber_count": subs,
-                    "channel_url": "https://youtube.com" + channel_url,
+                    "channel_url": f"https://youtube.com{channel_url}",
                 }
             )
             return video_data

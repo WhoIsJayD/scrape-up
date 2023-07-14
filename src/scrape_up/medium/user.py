@@ -27,7 +27,6 @@ class User:
         Returns a list of the titles.
         """
         try:
-            titles = []
             username = self.username
             driver.get(f"https://{username}.medium.com")
             scroll_pause = 0.5
@@ -55,14 +54,11 @@ class User:
                 if scrolled:
                     run_time = 0
                     last_height = new_height
-                elif not scrolled and not timed_out:
+                elif not timed_out:
                     run_time += time.time() - iteration_start
-                elif not scrolled and timed_out:
+                else:
                     break
             elements = driver.find_elements(By.CSS_SELECTOR, "h2")
-            for x in elements:
-                titles.append(x.text)
-            return titles
-
+            return [x.text for x in elements]
         except:
             return f"{username} not found."

@@ -9,8 +9,7 @@ class Users:
     def __scrape_page(self, url):
         response = requests.get(url)
         response.raise_for_status()  # Raise an exception for any HTTP errors
-        soup = BeautifulSoup(response.text, "html.parser")
-        return soup
+        return BeautifulSoup(response.text, "html.parser")
 
     def get_name(self):
         url = f"https://gitlab.com/{self.username}"

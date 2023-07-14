@@ -22,7 +22,7 @@ class TwitterScraper:
         self.chrome_options.add_argument("--blink-settings=imagesEnabled=false")
 
     def unametoid(self, username):
-        url = "https://twitter.com/{}".format(username)
+        url = f"https://twitter.com/{username}"
         # print(url)
         driver = webdriver.Chrome(options=self.chrome_options)
         driver.get(url)
@@ -44,7 +44,7 @@ class TwitterScraper:
             }
 
     def idtouname(self, numid):
-        url = "https://twitter.com/i/user/{}".format(numid)
+        url = f"https://twitter.com/i/user/{numid}"
         driver = webdriver.Chrome(options=self.chrome_options)
         driver.get(url)
         html = driver.page_source

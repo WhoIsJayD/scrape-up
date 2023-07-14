@@ -85,15 +85,16 @@ class Cricbuzz:
                     "div", attrs={"class": "cb-mtch-lst cb-col cb-col-100 cb-tms-itm"}
                 )
                 for m in series_matches:
-                    match_data = {}
-                    match_data["series_name"] = series_name
-                    match_data["match_name"] = (
-                        m.find(
-                            "h3", class_="cb-lv-scr-mtch-hdr inline-block"
-                        ).text.strip()
-                        + " "
-                        + m.find("span", class_="text-gray").text.strip()
-                    )
+                    match_data = {
+                        "series_name": series_name,
+                        "match_name": (
+                            m.find(
+                                "h3", class_="cb-lv-scr-mtch-hdr inline-block"
+                            ).text.strip()
+                            + " "
+                            + m.find("span", class_="text-gray").text.strip()
+                        ),
+                    }
                     match_data["start_date_time"] = (
                         self.__timestamp_to_date(
                             int(
@@ -117,23 +118,22 @@ class Cricbuzz:
                     match_data["match_id"] = match_id
                     if not isUpcoming:
                         match_data["status"] = m.find("div", class_="cb-text-live")
-                        if match_data["status"] == None:
+                        if match_data["status"] is None:
                             match_data["status"] = m.find(
                                 "div", class_="cb-text-complete"
                             )
-                        if match_data["status"] == None:
+                        if match_data["status"] is None:
                             match_data["status"] = m.find(
                                 "div", class_="cb-text-preview"
                             )
-                        if match_data["status"] != None:
-                            match_data["status"] = match_data["status"].text.strip()
-                        else:
+                        if match_data["status"] is None:
                             del match_data["status"]
-                        match_score = []
+                        else:
+                            match_data["status"] = match_data["status"].text.strip()
                         score_div = m.find(
                             "div", class_="cb-scr-wll-chvrn cb-lv-scrs-col"
                         )
-                        if score_div == None:
+                        if score_div is None:
                             matches.append(match_data)
                             continue
                         bat_scores_div = score_div.find(
@@ -142,14 +142,14 @@ class Cricbuzz:
                         bowl_scores_div = score_div.find(
                             "div", class_="cb-hmscg-bwl-txt"
                         )
-                        if bat_scores_div == None and bowl_scores_div == None:
+                        if bat_scores_div is None and bowl_scores_div is None:
                             matches.append(match_data)
                             continue
-                        elif bat_scores_div == None:
+                        elif bat_scores_div is None:
                             bat_scores_div = score_div.find_all(
                                 "div", class_="cb-hmscg-bwl-txt"
                             )[1]
-                        elif bowl_scores_div == None:
+                        elif bowl_scores_div is None:
                             bowl_scores_div = score_div.find_all(
                                 "div", class_="cb-hmscg-bat-txt"
                             )[1]
@@ -173,8 +173,7 @@ class Cricbuzz:
                             "team_name": bowl_team_names,
                             "scores": [i.strip() for i in bowl_scores.split("&")],
                         }
-                        match_score.append(bat_team_scores)
-                        match_score.append(bowl_team_scores)
+                        match_score = [bat_team_scores, bowl_team_scores]
                         match_data["score"] = match_score
                     matches.append(match_data)
             return matches
@@ -193,9 +192,8 @@ class Cricbuzz:
         ```
         """
         try:
-            URL = self.BASE_URL + "cricket-match/live-scores"
-            response = self.__scrape_match(url=URL, type=type)
-            return response
+            URL = f"{self.BASE_URL}cricket-match/live-scores"
+            return self.__scrape_match(url=URL, type=type)
         except:
             return None
 
@@ -210,9 +208,8 @@ class Cricbuzz:
         ```
         """
         try:
-            URL = self.BASE_URL + "cricket-match/live-scores/recent-matches"
-            response = self.__scrape_match(url=URL, type=type)
-            return response
+            URL = f"{self.BASE_URL}cricket-match/live-scores/recent-matches"
+            return self.__scrape_match(url=URL, type=type)
         except:
             return None
 
@@ -227,9 +224,8 @@ class Cricbuzz:
         ```
         """
         try:
-            URL = self.BASE_URL + "cricket-match/live-scores/upcoming-matches"
-            response = self.__scrape_match(url=URL, type=type, isUpcoming=True)
-            return response
+            URL = f"{self.BASE_URL}cricket-match/live-scores/upcoming-matches"
+            return self.__scrape_match(url=URL, type=type, isUpcoming=True)
         except:
             return None
 
@@ -294,7 +290,7 @@ class Cricbuzz:
                             ).text.strip(),
                         }
                     )
-                if series_data.get(series_month.text.strip()) == None:
+                if series_data.get(series_month.text.strip()) is None:
                     series_data[series_month.text.strip()] = monthly_series_data
                 else:
                     series_data[series_month.text.strip()].extend(monthly_series_data)
@@ -313,9 +309,8 @@ class Cricbuzz:
         ```
         """
         try:
-            URL = self.BASE_URL + "cricket-schedule/series"
-            response = self.__scrape_series(url=URL, type=type)
-            return response
+            URL = f"{self.BASE_URL}cricket-schedule/series"
+            return self.__scrape_series(url=URL, type=type)
         except:
             return None
 
@@ -377,11 +372,10 @@ class Cricbuzz:
         ```
         """
         try:
-            URL = self.BASE_URL + f"cricket-scorecard-archives/{year}"
+            URL = f"{self.BASE_URL}cricket-scorecard-archives/{year}"
             if type.lower() not in self.TYPES:
                 return [{"error": "Invalid type"}]
-            response = self.__scrape_series_from_archive(url=URL, type=type)
-            return response
+            return self.__scrape_series_from_archive(url=URL, type=type)
         except:
             return None
 
@@ -439,13 +433,12 @@ class Cricbuzz:
         ```
         """
         try:
-            URL = self.BASE_URL + "cricket-schedule/upcoming-series"
+            URL = f"{self.BASE_URL}cricket-schedule/upcoming-series"
             if type.lower() not in self.TYPES:
                 return [{"error": "Invalid type"}]
             else:
                 URL += f"/{type.lower()}"
-            response = self.__scarpe_matches_by_day(url=URL, type=type)
-            return response
+            return self.__scarpe_matches_by_day(url=URL, type=type)
         except:
             return None
 
@@ -459,18 +452,19 @@ class Cricbuzz:
             data = soup.find_all("div", class_="cb-series-matches")
             matches = []
             for m in data:
-                match_data = {}
-                match_data["match_start_data_time"] = (
-                    self.__timestamp_to_date(
-                        int(
-                            m.find("div", class_="schedule-date")
-                            .find("span")["ng-bind"]
-                            .split("|")[0]
-                            .strip()
+                match_data = {
+                    "match_start_data_time": (
+                        self.__timestamp_to_date(
+                            int(
+                                m.find("div", class_="schedule-date")
+                                .find("span")["ng-bind"]
+                                .split("|")[0]
+                                .strip()
+                            )
                         )
+                        + " GMT"
                     )
-                    + " GMT"
-                )
+                }
                 match_data["match_title"] = (
                     m.find("div", class_="cb-col-60 cb-col cb-srs-mtchs-tm")
                     .find("span")
@@ -519,7 +513,7 @@ class Cricbuzz:
         ```
         """
         try:
-            URL = self.BASE_URL + f"cricket-series/{series_id}/series/matches"
+            URL = f"{self.BASE_URL}cricket-series/{series_id}/series/matches"
             return self.__scrape_series_matches(url=URL)
         except:
             return None
@@ -532,7 +526,7 @@ class Cricbuzz:
             if res.status_code != 200:
                 return [{"error": "Unable to fetch data from cricbuzz"}]
             soup = BeautifulSoup(res.text, "html.parser")
-            if soup.find("tbody") == None:
+            if soup.find("tbody") is None:
                 return {"error": "No data found"}
             keys = [i.text.strip() for i in soup.find("thead").find_all("th")]
             players_data = soup.find("tbody").find_all("tr")
@@ -618,17 +612,17 @@ class Cricbuzz:
         cricbuzz.get_teams_list(type="all")
         ```
         """
-        URL = self.BASE_URL + "cricket-team"
+        URL = f"{self.BASE_URL}cricket-team"
         if type.lower() not in self.TYPES:
             return [{"error": "Invalid type"}]
-        elif type.lower() != "all" and type.lower() != "international":
+        elif type.lower() not in ["all", "international"]:
             URL += f"/{type.lower()}"
         if type.lower() == "all":
             return {
                 "international": self.__scrape_team_data(url=URL),
-                "domestic": self.__scrape_team_data(url=URL + "/domestic"),
-                "league": self.__scrape_team_data(url=URL + "/league"),
-                "women": self.__scrape_team_data(url=URL + "/women"),
+                "domestic": self.__scrape_team_data(url=f"{URL}/domestic"),
+                "league": self.__scrape_team_data(url=f"{URL}/league"),
+                "women": self.__scrape_team_data(url=f"{URL}/women"),
             }
         return self.__scrape_team_data(url=URL)
 
@@ -642,18 +636,19 @@ class Cricbuzz:
             data = soup.find_all("div", class_="cb-series-matches")
             matches = []
             for m in data:
-                match_data = {}
-                match_data["match_start_data_time"] = (
-                    self.__timestamp_to_date(
-                        int(
-                            m.find("div", class_="schedule-date")
-                            .find("span")["ng-bind"]
-                            .split("|")[0]
-                            .strip()
+                match_data = {
+                    "match_start_data_time": (
+                        self.__timestamp_to_date(
+                            int(
+                                m.find("div", class_="schedule-date")
+                                .find("span")["ng-bind"]
+                                .split("|")[0]
+                                .strip()
+                            )
                         )
+                        + " GMT"
                     )
-                    + " GMT"
-                )
+                }
                 match_data["match_title"] = (
                     m.find("div", class_="cb-srs-mtchs-tm").find("span").text.strip()
                 )
@@ -703,7 +698,7 @@ class Cricbuzz:
         cricbuzz = Cricubzz()
         cricbuzz.get_team_schedule(team_id=" ")
         """
-        URL = self.BASE_URL + f"cricket-team/team/{team_id}/schedule"
+        URL = f"{self.BASE_URL}cricket-team/team/{team_id}/schedule"
         return self.__scrape_team_schedule(url=URL)
 
     def __scrape_team_players(self, url):
@@ -738,7 +733,7 @@ class Cricbuzz:
         ```
         """
         try:
-            URL = self.BASE_URL + f"cricket-team/team/{team_id}/players"
+            URL = f"{self.BASE_URL}cricket-team/team/{team_id}/players"
             return self.__scrape_team_players(url=URL)
         except:
             return None
@@ -755,13 +750,14 @@ class Cricbuzz:
             )
             matches = []
             for m in data:
-                match_data = {}
-                match_data["match_start_data_time"] = (
-                    self.__timestamp_to_date(
-                        int(m.find("span")["ng-bind"].split("|")[0].strip())
+                match_data = {
+                    "match_start_data_time": (
+                        self.__timestamp_to_date(
+                            int(m.find("span")["ng-bind"].split("|")[0].strip())
+                        )
+                        + " GMT"
                     )
-                    + " GMT"
-                )
+                }
                 match_data["match_title"] = (
                     m.find("div", class_="cb-srs-mtchs-tm").find("a").text.strip()
                 )
@@ -821,7 +817,7 @@ class Cricbuzz:
         ```
         """
         try:
-            URL = self.BASE_URL + f"cricket-team/team/{team_id}/results"
+            URL = f"{self.BASE_URL}cricket-team/team/{team_id}/results"
             return self.__scrape_team_results(url=URL)
         except:
             return None
@@ -834,7 +830,7 @@ class Cricbuzz:
             if res.status_code != 200:
                 return [{"error": "Unable to fetch data from cricbuzz"}]
             soup = BeautifulSoup(res.text, "html.parser")
-            if soup.find("tbody") == None:
+            if soup.find("tbody") is None:
                 return {"error": "No data found"}
             keys = [i.text.strip() for i in soup.find("thead").find_all("th")]
             players_data = soup.find("tbody").find_all("tr")

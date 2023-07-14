@@ -90,14 +90,12 @@ class TechCrunch:
                         "link": link,
                     }
                 )
-            res_json = json.dumps(articles_data)
-            return res_json
+            return json.dumps(articles_data)
         except:
             error_message = {
                 "message": "Can't fetch any articles from the topic provided."
             }
-            ejson = json.dumps(error_message)
-            return ejson
+            return json.dumps(error_message)
 
     def search(self, topic):
         self.topic = topic
@@ -118,7 +116,7 @@ class TechCrunch:
             "link": Link to the article
         }
         """
-        url = "https://search.techcrunch.com/search?p=" + self.topic + "&fr=techcrunch"
+        url = f"https://search.techcrunch.com/search?p={self.topic}&fr=techcrunch"
         try:
             res = requests.get(url)
             soup = BeautifulSoup(res.text, "html.parser")
